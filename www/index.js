@@ -11,8 +11,10 @@ const universe = Universe.new();
 const width = universe.width();
 const height = universe.height();
 
-// Give the canvas room for all of our cells and a 1px border
-// around each of them.
+const animationSpeed = document.getElementById("animation-speed");
+const playPauseButton = document.getElementById("play-pause");
+const randomizeButton = document.getElementById("randomize");
+const clearButton = document.getElementById("clear");
 const canvas = document.getElementById("game-of-life-canvas");
 canvas.height = (CELL_SIZE + 1) * height + 1;
 canvas.width = (CELL_SIZE + 1) * width + 1;
@@ -35,10 +37,6 @@ const isPaused = () => {
   return animationId === null;
 };
 
-const animationSpeed = document.getElementById("animation-speed");
-
-const playPauseButton = document.getElementById("play-pause");
-
 const play = () => {
   playPauseButton.textContent = "⏸";
   renderLoop();
@@ -56,6 +54,18 @@ playPauseButton.addEventListener("click", (event) => {
   } else {
     pause();
   }
+});
+
+randomizeButton.addEventListener("click", (event) => {
+  universe.randomize();
+  drawGrid();
+  drawCells();
+});
+
+clearButton.addEventListener("click", (event) => {
+  universe.clear();
+  drawGrid();
+  drawCells();
 });
 
 const drawGrid = () => {

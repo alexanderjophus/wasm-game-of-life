@@ -1,0 +1,32 @@
+name: github pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: 1.81.0
+          override: true
+          target: wasm32-unknown-unknown
+      - uses: cargo-bins/cargo-binstall@main
+      - uses: actions/checkout@v2
+      - name: Install wasm-pack
+        run: cargo binstall wasm-pack
+      - name: Build
+        run: wasm-pack build --release
+      - run: cd www && npm install
+      - run: cd www && npm run build
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.2.3
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: www/dist # The folder the action should deploy.
+          target-folder: .
+          clean: false # don't scrub docs

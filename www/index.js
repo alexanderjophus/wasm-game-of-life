@@ -24,7 +24,9 @@ const renderLoop = () => {
   drawGrid();
   drawCells();
 
-  universe.tick();
+  for (let i = 0; i < animationSpeed.value; i++) {
+    universe.tick();
+  }
 
   animationId = requestAnimationFrame(renderLoop);
 };
@@ -32,6 +34,8 @@ const renderLoop = () => {
 const isPaused = () => {
   return animationId === null;
 };
+
+const animationSpeed = document.getElementById("animation-speed");
 
 const playPauseButton = document.getElementById("play-pause");
 
